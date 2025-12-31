@@ -1,40 +1,289 @@
 
 <main>
-
-    {{!-- Formulário --}}
-    <div class="container">
-        <div class="row">
-            <div class="col-6 offset-3">
-
-                {{!-- Mensagens --}}
-                {{>mensagens}}
-
-               <form action="/cadastrar" method="post" enctype="multipart/form-data">
-                <input type="text" name="nome" class="form-control" placeholder="Nome do produto">
-                <input type="number" name="valor" class="form-control" placeholder="Valor do produto">
-                <input type="file" name="imagem" class="form-control">
-                <input type="submit" class="btn btn-primary" value="Cadastrar">
-               </form>
+    <!-- Dashboard Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">TOTAL DE PRODUTOS</h6>
+                            <h2 class="mb-0 mt-2">{{produtos.length}}</h2>
+                        </div>
+                        <i class="fas fa-box fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">VALOR EM ESTOQUE</h6>
+                            <h2 class="mb-0 mt-2">R$ 
+                                {{#if produtos}}
+                                    {{#reduce produtos 0}}{{this.valor}}{{/reduce}}
+                                {{else}}
+                                    0.00
+                                {{/if}}
+                            </h2>
+                        </div>
+                        <i class="fas fa-dollar-sign fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-warning text-white shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">PRODUTOS ATIVOS</h6>
+                            <h2 class="mb-0 mt-2">{{produtos.length}}</h2>
+                        </div>
+                        <i class="fas fa-check-circle fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">ÚLTIMA ATUALIZAÇÃO</h6>
+                            <h6 class="mb-0 mt-2">{{now}}</h6>
+                        </div>
+                        <i class="fas fa-sync-alt fa-2x opacity-50"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    {{!-- Listagem de produtos --}}
-    <div class="container">
-        <div class="row">
-            {{#each produtos}}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card">
-                    <img src="../img/{{imagem}}">
-                    <div class="textos">
-                        <p>{{nome}}</p>
-                        <p>R${{valor}}</p>
+    <!-- Mensagens -->
+    <div class="row mb-4" id="mensagens-section">
+        <div class="col-12">
+            {{>mensagens}}
+        </div>
+    </div>
+
+    <!-- Cadastro de Produto -->
+    <div class="row mb-5" id="cadastro-section">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus-circle me-2 text-primary"></i>
+                            CADASTRAR NOVO PRODUTO
+                        </h5>
+                        <span class="badge bg-primary">PDV</span>
                     </div>
-                    <a href="/formularioEditar/{{codigo}}" class="btn btn-warning">Alterar</a>
-                    <a href="/remover/{{codigo}}&{{imagem}}" class="btn btn-danger">Remover</a>
+                </div>
+                <div class="card-body">
+                    <form action="/cadastrar" method="post" enctype="multipart/form-data" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nome" class="form-label">
+                                <i class="fas fa-tag me-1"></i>
+                                Nome do Produto
+                            </label>
+                            <input type="text" name="nome" id="nome" class="form-control form-control-lg" 
+                                   placeholder="Digite o nome do produto" required>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="valor" class="form-label">
+                                <i class="fas fa-dollar-sign me-1"></i>
+                                Preço (R$)
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" name="valor" id="valor" class="form-control" 
+                                       placeholder="0.00" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="imagem" class="form-label">
+                                <i class="fas fa-image me-1"></i>
+                                Imagem do Produto
+                            </label>
+                            <input type="file" name="imagem" id="imagem" 
+                                   class="form-control form-control-lg" accept="image/*" required>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="reset" class="btn btn-outline-secondary btn-lg me-2">
+                                    <i class="fas fa-redo me-1"></i>
+                                    Limpar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-save me-1"></i>
+                                    Cadastrar Produto
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            {{/each}}
+        </div>
+    </div>
+
+    <!-- Listagem de Produtos -->
+    <div class="row" id="produtos-section">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-boxes me-2 text-primary"></i>
+                            PRODUTOS CADASTRADOS
+                        </h5>
+                        <span class="badge bg-success">{{produtos.length}} itens</span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    {{#if produtos.length}}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="80">IMAGEM</th>
+                                    <th>PRODUTO</th>
+                                    <th class="text-end">PREÇO</th>
+                                    <th class="text-center">CÓDIGO</th>
+                                    <th class="text-center">AÇÕES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each produtos}}
+                                <tr class="produto-card">
+                                    <td>
+                                        <div class="product-image-container">
+                                            <img src="/img/{{imagem}}" alt="{{nome}}" 
+                                                 class="img-thumbnail product-img">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-1">{{nome}}</h6>
+                                        <small class="text-muted">
+                                            <i class="fas fa-barcode me-1"></i>
+                                            COD: {{codigo}}
+                                        </small>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge bg-success fs-6">
+                                            R$ {{valor}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-dark">{{codigo}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a href="/formularioEditar/{{codigo}}" 
+                                               class="btn btn-outline-warning btn-sm" 
+                                               title="Editar Produto">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="/remover/{{codigo}}&{{imagem}}" 
+                                               class="btn btn-outline-danger btn-sm"
+                                               onclick="return confirm('Tem certeza que deseja remover o produto \\'{{nome}}\\'?')"
+                                               title="Remover Produto">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-outline-primary btn-sm"
+                                                    onclick="adicionarAoCarrinho('{{codigo}}', '{{nome}}', {{valor}})"
+                                                    title="Vender Produto">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{else}}
+                    <div class="text-center py-5">
+                        <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">Nenhum produto cadastrado</h4>
+                        <p class="text-muted">Comece cadastrando seu primeiro produto acima.</p>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal do Carrinho (para PDV) -->
+    <div class="modal fade" id="carrinhoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        PONTO DE VENDA
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="carrinho-content">
+                        <!-- Conteúdo do carrinho será inserido aqui via JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Fechar
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="finalizarVenda()">
+                        <i class="fas fa-check me-1"></i>
+                        Finalizar Venda
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </main>
+
+<script>
+    // Helper para somar valores (precisa ser registrado no Handlebars)
+    Handlebars.registerHelper('reduce', function(array, initialValue) {
+        return array.reduce((sum, item) => sum + parseFloat(item.valor), initialValue);
+    });
+    
+    // Carrinho de compras
+    let carrinho = [];
+    
+    function adicionarAoCarrinho(codigo, nome, valor) {
+        carrinho.push({ codigo, nome, valor });
+        atualizarCarrinho();
+        alert(`Produto "${nome}" adicionado ao carrinho!`);
+    }
+    
+    function atualizarCarrinho() {
+        // Implementação do carrinho
+        console.log('Carrinho atualizado:', carrinho);
+    }
+    
+    function finalizarVenda() {
+        if (carrinho.length === 0) {
+            alert('Adicione produtos ao carrinho primeiro!');
+            return;
+        }
+        
+        const total = carrinho.reduce((sum, item) => sum + item.valor, 0);
+        alert(`Venda finalizada! Total: R$ ${total.toFixed(2)}`);
+        carrinho = [];
+        atualizarCarrinho();
+    }
+</script>

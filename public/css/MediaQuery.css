@@ -1,0 +1,169 @@
+
+/* Media Queries para PDV Master */
+
+/* Dispositivos extra pequenos (celulares, menos de 576px) */
+@media (max-width: 575.98px) {
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+    
+    .btn-group {
+        flex-direction: column !important;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    
+    footer .row > div {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Dispositivos pequenos (celulares em paisagem, 576px a 767.98px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .product-image-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .table td, .table th {
+        padding: 0.5rem;
+    }
+}
+
+/* Dispositivos médios (tablets, 768px a 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    #sidebar {
+        min-width: 220px;
+    }
+    
+    .col-md-3 .card h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Dispositivos grandes (desktops, 992px a 1199.98px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container-fluid {
+        max-width: 95%;
+    }
+}
+
+/* Dispositivos extra grandes (desktops grandes, 1200px e acima) */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1400px;
+    }
+    
+    #sidebar {
+        min-width: 280px;
+    }
+}
+
+/* Impressão */
+@media print {
+    .sidebar, .navbar, footer, .btn {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .table {
+        border: 1px solid #000;
+    }
+    
+    .table th, .table td {
+        border: 1px solid #000;
+    }
+}
+
+/* Modo escuro */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .card {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+    
+    .table {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+    
+    .table-light {
+        background-color: #3d3d3d;
+        color: #ffffff;
+    }
+}
+
+/* Altura específica para mobile */
+@media (max-height: 700px) {
+    .sidebar-header {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    .nav-link {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Orientação paisagem em dispositivos móveis */
+@media (max-width: 767.98px) and (orientation: landscape) {
+    .sidebar-header h4 {
+        font-size: 1.2rem;
+    }
+    
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 360px) {
+    .navbar-brand h4 {
+        font-size: 1.2rem;
+    }
+    
+    .card-header h5 {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Ajustes para tablets em modo retrato */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    
+    .col-md-3, .col-md-4, .col-md-6, .col-md-8 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

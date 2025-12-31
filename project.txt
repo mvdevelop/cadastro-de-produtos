@@ -1,0 +1,200 @@
+
+// ./views/layouts/main.handlebars
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <title>
+        Projeto NodeJs + MySql
+    </title>
+
+    {{!-- Bootstrap --}}
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+
+    {{!-- CSS --}}
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/MediaQuery.css">
+</head>
+<body>
+    <header class="text-light p-2">
+        <h2 class="m-auto">Cadastro de Produtos</h2>
+    </header>
+
+    {{{body}}}
+
+    <footer class="bg-dark text-light mt-5 p-5">
+        <div class="about">
+            <div class="ft0">
+                <span><i class='bx bxl-javascript js'></i></span>
+                <span><i class='bx bxl-typescript ts' ></i></span>
+                <span><i class='bx bxl-nodejs njs' ></i></span>
+                <span><i class='bx bxs-data sql'></i></span>
+                <span><i class='bx bxl-react rc' ></i></span>
+                <span><i class='bx bxl-bootstrap bt' ></i></span>
+                <span><i class='bx bxl-aws aws'></i></span>
+            </div>
+
+            <div class="ft1">
+                <p>Developing <span>solutions</span> for each type of problem for <span>all people</span>.</p>
+                <p>Sometimes it is the people no one imagines anything of who do the things that no one can imagine.
+                <span>Alan Turing</span></p>
+            </div>
+    
+            <div class="ft2">
+                <img src="/img/default_transparent_1000x1000.png">
+                <nav>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                    <a href="https://www.linkedin.com/in/mvdevelop" target="_blank"><i class='bx bxl-linkedin'></i></a>
+                    <a href="https://github.com/MvDevelop" target="_blank"><i class='bx bxl-github'></i></a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+./views/partials/mensagens.handlebars
+
+
+{{!-- Mensagens success --}}
+    {{#condicionalIgualdade situacao "okCadastro"}}
+        <div class="alert alert-success">
+            Produto cadastrado com sucesso!
+        </div>
+    {{/condicionalIgualdade}}
+
+    {{#condicionalIgualdade situacao "okEdicao"}}
+        <div class="alert alert-success">
+            Produto editado com sucesso!
+        </div>
+    {{/condicionalIgualdade}}
+
+    {{#condicionalIgualdade situacao "okRemover"}}
+        <div class="alert alert-success">
+            Produto removido com sucesso!
+        </div>
+    {{/condicionalIgualdade}}
+
+{{!-- Mensagens falha --}}
+    {{#condicionalIgualdade situacao "falhaCadastro"}}
+        <div class="alert alert-danger">
+            Falha ao cadastrar o produto, tente novamente!
+        </div>
+    {{/condicionalIgualdade}}
+
+    {{#condicionalIgualdade situacao "falhaEdicao"}}
+        <div class="alert alert-danger">
+            Falha ao editar o produto, tente novamente!
+        </div>
+    {{/condicionalIgualdade}}
+
+    {{#condicionalIgualdade situacao "falhaRemover"}}
+        <div class="alert alert-danger">
+            Falha ao remover o produto, tente novamente!
+        </div>
+    {{/condicionalIgualdade}}
+
+./views/formulario.handlebars
+
+
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                {{>mensagens}}
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Cadastrar Novo Produto</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/cadastrar" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome do Produto</label>
+                                <input type="text" name="nome" id="nome" class="form-control" placeholder="Digite o nome do produto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="valor" class="form-label">Valor (R$)</label>
+                                <input type="number" name="valor" id="valor" class="form-control" placeholder="0.00" step="0.01" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imagem" class="form-label">Imagem do Produto</label>
+                                <input type="file" name="imagem" id="imagem" class="form-control" accept="image/*" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class='bx bx-save'></i> Cadastrar Produto
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Listagem de produtos --}}
+    <div class="container mt-5">
+        <h3 class="mb-4">Produtos Cadastrados</h3>
+        <div class="row">
+            {{#each produtos}}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="/img/{{imagem}}" class="card-img-top" alt="{{nome}}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{nome}}</h5>
+                        <p class="card-text text-success fw-bold">R$ {{valor}}</p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <a href="/formularioEditar/{{codigo}}" class="btn btn-warning btn-sm">
+                                <i class='bx bx-edit'></i> Alterar
+                            </a>
+                            <a href="/remover/{{codigo}}&{{imagem}}" 
+                               class="btn btn-danger btn-sm" 
+                               onclick="return confirm('Tem certeza que deseja remover este produto?')">
+                                <i class='bx bx-trash'></i> Remover
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    Nenhum produto cadastrado ainda.
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</main>
+
+./views/formularioEditar.handlebars
+
+
+<main>
+
+    {{!-- Formulário --}}
+    <div class="container">
+        <div class="row">
+            <div class="col-6 offset-3">
+               <form action="/editar" method="post" enctype="multipart/form-data">
+                <img src="../img/{{produto.imagem}}">
+
+                <input type="hidden" name="nomeImagem" value="{{produto.imagem}}">
+                <input type="hidden" name="codigo" value="{{produto.codigo}}">
+                <input type="text" name="nome" value="{{produto.nome}}" class="form-control" placeholder="Nome do produto">
+                <input type="number" name="valor" value="{{produto.valor}}" class="form-control" placeholder="Valor do produto">
+                <input type="file" name="imagem" class="form-control">
+                <input type="submit" class="btn btn-primary" value="Alterar">
+                <a href="/" class="btn btn-secondary">Cancelar</a>
+               </form>
+            </div>
+        </div>
+    </div>
+
+</main>

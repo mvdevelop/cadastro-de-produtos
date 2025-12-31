@@ -1,23 +1,122 @@
 
 <main>
-
-    {{!-- Formulário --}}
-    <div class="container">
-        <div class="row">
-            <div class="col-6 offset-3">
-               <form action="/editar" method="post" enctype="multipart/form-data">
-                <img src="../img/{{produto.imagem}}">
-
-                <input type="hidden" name="nomeImagem" value="{{produto.imagem}}">
-                <input type="hidden" name="codigo" value="{{produto.codigo}}">
-                <input type="text" name="nome" value="{{produto.nome}}" class="form-control" placeholder="Nome do produto">
-                <input type="number" name="valor" value="{{produto.valor}}" class="form-control" placeholder="Valor do produto">
-                <input type="file" name="imagem" class="form-control">
-                <input type="submit" class="btn btn-primary" value="Alterar">
-                <a href="/" class="btn btn-secondary">Cancelar</a>
-               </form>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-edit me-2 text-warning"></i>
+                            EDITAR PRODUTO
+                        </h5>
+                        <a href="/" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Voltar
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Imagem do Produto -->
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <img src="/img/{{produto.imagem}}" 
+                                         alt="{{produto.nome}}" 
+                                         class="img-fluid rounded mb-3 product-preview"
+                                         style="max-height: 200px;">
+                                    <p class="text-muted small mb-0">Imagem Atual</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulário -->
+                        <div class="col-md-8">
+                            <form action="/editar" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="nomeImagem" value="{{produto.imagem}}">
+                                <input type="hidden" name="codigo" value="{{produto.codigo}}">
+                                
+                                <div class="mb-4">
+                                    <label for="nome" class="form-label fw-bold">
+                                        <i class="fas fa-tag me-1"></i>
+                                        Nome do Produto
+                                    </label>
+                                    <input type="text" name="nome" id="nome" 
+                                           value="{{produto.nome}}"
+                                           class="form-control form-control-lg" 
+                                           placeholder="Nome do produto" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="valor" class="form-label fw-bold">
+                                        <i class="fas fa-dollar-sign me-1"></i>
+                                        Preço (R$)
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" name="valor" id="valor" 
+                                               value="{{produto.valor}}"
+                                               class="form-control" 
+                                               placeholder="0.00" step="0.01" min="0" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="imagem" class="form-label fw-bold">
+                                        <i class="fas fa-image me-1"></i>
+                                        Nova Imagem (opcional)
+                                    </label>
+                                    <input type="file" name="imagem" id="imagem" 
+                                           class="form-control" 
+                                           accept="image/*"
+                                           onchange="previewImage(event)">
+                                    <small class="text-muted">
+                                        Deixe em branco para manter a imagem atual
+                                    </small>
+                                    <div class="mt-2">
+                                        <img id="imagePreview" src="#" 
+                                             alt="Prévia da nova imagem" 
+                                             class="img-thumbnail d-none"
+                                             style="max-height: 150px;">
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                    <a href="/" class="btn btn-outline-secondary btn-lg me-2">
+                                        <i class="fas fa-times me-1"></i>
+                                        Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-warning btn-lg px-5">
+                                        <i class="fas fa-save me-1"></i>
+                                        Salvar Alterações
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </main>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.classList.add('d-none');
+        }
+    }
+</script>
